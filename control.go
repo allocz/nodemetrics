@@ -1408,7 +1408,7 @@ func run() error {
 		return btcdCommand(ctx, os.Args[2:])
 	case "bitcoind":
 		return bitcoindCommand(ctx, os.Args[2:])
-	case "-h,--help,help":
+	case "-h","--help","help":
 		printHelpMessage()
 		return nil
 	default: 

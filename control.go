@@ -66,7 +66,7 @@ func must(err error) {
 // SECTION_START cli_helpers
 
 type cmdError struct {
-	code int
+	code   int
 	stderr bytes.Buffer
 }
 
@@ -130,8 +130,8 @@ func procPidStatGen() string {
 		typeU64 = "uint64"
 		typeStr = "string"
 	)
-	genTable := []struct{
-		name string
+	genTable := []struct {
+		name  string
 		ftype string
 	}{
 		// reference: https://www.man7.org/linux/man-pages//man5/proc_pid_stat.5.html
@@ -211,10 +211,10 @@ func procPidStatGen() string {
 		case typeU64:
 			fmt.Fprintf(
 				&buf,
-				"\n\tp.%s, err = strconv.ParseUint(string(items[%d]), 10, 64)" +
-				"\n\tif err != nil {" +
-				"\n\t\treturn WrapMessage(\"%s: %%w\", err)" +
-				"\n\t}",
+				"\n\tp.%s, err = strconv.ParseUint(string(items[%d]), 10, 64)"+
+					"\n\tif err != nil {"+
+					"\n\t\treturn WrapMessage(\"%s: %%w\", err)"+
+					"\n\t}",
 				v.name,
 				i,
 				v.name,
@@ -233,58 +233,58 @@ func procPidStatGen() string {
 }
 
 type procPidStat struct {
-	Pid uint64
-	Comm string
-	State string
-	Ppid uint64
-	Pgrp uint64
-	Session uint64
-	TtyNr uint64
-	Tpgid uint64
-	Flags uint64
-	Minflt uint64
-	Cminflt uint64
-	Majflt uint64
-	Cmajflt uint64
-	Utime uint64
-	Stime uint64
-	Cutime uint64
-	Cstime uint64
-	Priority uint64
-	Nice uint64
-	NumThreads uint64
-	Itrealvalue uint64
-	Starttime uint64
-	Vsize uint64
-	Rss uint64
-	Rsslim uint64
-	Startcode uint64
-	Endcode uint64
-	Startstack uint64
-	Kstkesp uint64
-	Kstkeip uint64
-	Signal uint64
-	Blocked uint64
-	Sigignore uint64
-	Sigcatch uint64
-	Wchan uint64
-	Nswap uint64
-	Cnswap uint64
-	ExitSignal uint64
-	Processor uint64
-	RtPriority uint64
-	Policy uint64
+	Pid                 uint64
+	Comm                string
+	State               string
+	Ppid                uint64
+	Pgrp                uint64
+	Session             uint64
+	TtyNr               uint64
+	Tpgid               uint64
+	Flags               uint64
+	Minflt              uint64
+	Cminflt             uint64
+	Majflt              uint64
+	Cmajflt             uint64
+	Utime               uint64
+	Stime               uint64
+	Cutime              uint64
+	Cstime              uint64
+	Priority            uint64
+	Nice                uint64
+	NumThreads          uint64
+	Itrealvalue         uint64
+	Starttime           uint64
+	Vsize               uint64
+	Rss                 uint64
+	Rsslim              uint64
+	Startcode           uint64
+	Endcode             uint64
+	Startstack          uint64
+	Kstkesp             uint64
+	Kstkeip             uint64
+	Signal              uint64
+	Blocked             uint64
+	Sigignore           uint64
+	Sigcatch            uint64
+	Wchan               uint64
+	Nswap               uint64
+	Cnswap              uint64
+	ExitSignal          uint64
+	Processor           uint64
+	RtPriority          uint64
+	Policy              uint64
 	DelayacctBlkioTicks uint64
-	GuestTime uint64
-	CguestTime uint64
-	StartData uint64
-	EndData uint64
-	StartBrk uint64
-	ArgStart uint64
-	ArgEnd uint64
-	EnvStart uint64
-	EnvEnd uint64
-	ExitCode uint64
+	GuestTime           uint64
+	CguestTime          uint64
+	StartData           uint64
+	EndData             uint64
+	StartBrk            uint64
+	ArgStart            uint64
+	ArgEnd              uint64
+	EnvStart            uint64
+	EnvEnd              uint64
+	ExitCode            uint64
 }
 
 func (p *procPidStat) Parse(items [][]byte) error {
@@ -515,12 +515,12 @@ func (p *procPidStat) Update(pid int) error {
 }
 
 type procPidIo struct {
-	rchar uint64
-	wchar uint64
-	syscr uint64
-	syscw uint64
-	read_bytes uint64
-	write_bytes uint64
+	rchar                 uint64
+	wchar                 uint64
+	syscr                 uint64
+	syscw                 uint64
+	read_bytes            uint64
+	write_bytes           uint64
 	cancelled_write_bytes uint64
 }
 
@@ -561,13 +561,20 @@ func (i *procPidIo) Update(pid int) error {
 			return Wrap(err)
 		}
 		switch i {
-		case 0: r.rchar = v
-		case 1: r.wchar = v
-		case 2: r.syscr = v
-		case 3: r.syscw = v
-		case 4: r.read_bytes = v
-		case 5: r.write_bytes = v
-		case 6: r.cancelled_write_bytes = v
+		case 0:
+			r.rchar = v
+		case 1:
+			r.wchar = v
+		case 2:
+			r.syscr = v
+		case 3:
+			r.syscw = v
+		case 4:
+			r.read_bytes = v
+		case 5:
+			r.write_bytes = v
+		case 6:
+			r.cancelled_write_bytes = v
 		}
 	}
 	*i = r
@@ -576,8 +583,8 @@ func (i *procPidIo) Update(pid int) error {
 
 func (i *procPidIo) String() string {
 	return fmt.Sprintf(
-		"rchar %d wchar %d syscr %d syscw %d read_bytes %d" + 
-		" write_bytes %d cacelled_write_bytes %d",
+		"rchar %d wchar %d syscr %d syscw %d read_bytes %d"+
+			" write_bytes %d cacelled_write_bytes %d",
 		i.rchar,
 		i.wchar,
 		i.syscr,
@@ -602,23 +609,24 @@ func procSignalSend(pid, signal int) bool {
 
 type nodeOpts struct {
 	// args
-	datadir string
-	rpcuser string
-	rpcpassword string
-	profilePort int
-	utxoCacheMB int
-	mempoolMB int
-	listenAddr string
+	datadir       string
+	rpcuser       string
+	rpcpassword   string
+	profilePort   int
+	utxoCacheMB   int
+	mempoolMB     int
+	listenAddr    string
 	rpcListenAddr string
-	checkpoint string
-	nocheckpoint bool
-	connect string
-	pruneMB int
+	checkpoint    string
+	nocheckpoint  bool
+	signet        bool
+	connect       string
+	pruneMB       int
 
 	// control
-	stopHeight int
+	stopHeight   int
 	statsLogFile string
-	https bool
+	https        bool
 
 	// args passed to the binary being executed
 	binArgs []string
@@ -671,38 +679,38 @@ func nodeRun(ctx context.Context, binPath string, opts nodeOpts) error {
 type nodeStats struct {
 	// timing
 	StartTs int64
-	LastTs int64
+	LastTs  int64
 
 	// memory and CPU stats
-	VMmaxBytes uint64
-	VMbytes uint64
+	VMmaxBytes  uint64
+	VMbytes     uint64
 	RSSmaxBytes uint64
-	RSSbytes uint64
-	CPUuserNS uint64
+	RSSbytes    uint64
+	CPUuserNS   uint64
 	CPUsystemNS uint64
 
 	// I/O stats
-	StorageReadBytes uint64
+	StorageReadBytes  uint64
 	StorageWriteBytes uint64
-	RcharBytes uint64
-	WcharBytes uint64
+	RcharBytes        uint64
+	WcharBytes        uint64
 
 	// storage usage
 	DataStoreSizeBytes uint64
 
 	// height tracking
 	startHeightSet bool
-	StartHeight int
-	CurrentHeight int
+	StartHeight    int
+	CurrentHeight  int
 
 	NsPerBlock uint64
-	Obs string
+	Obs        string
 }
 
 func newNodeStats(obs string) *nodeStats {
 	return &nodeStats{
 		StartTs: time.Now().Unix(),
-		Obs: obs,
+		Obs:     obs,
 	}
 }
 
@@ -734,7 +742,7 @@ func (s *nodeStats) update(
 		if err != nil {
 			return Wrap(err)
 		}
-		clockTickMul = 1_000_000_000/clockTicks
+		clockTickMul = 1_000_000_000 / clockTicks
 	}
 
 	// memory and CPU stats
@@ -745,10 +753,10 @@ func (s *nodeStats) update(
 	}
 	s.VMbytes = ps.Vsize
 	s.VMmaxBytes = max(s.VMmaxBytes, s.VMbytes)
-	s.RSSbytes = ps.Rss*pageSize
+	s.RSSbytes = ps.Rss * pageSize
 	s.RSSmaxBytes = max(s.RSSmaxBytes, s.RSSbytes)
-	s.CPUuserNS = ps.Utime*clockTickMul
-	s.CPUsystemNS = ps.Stime*clockTickMul
+	s.CPUuserNS = ps.Utime * clockTickMul
+	s.CPUsystemNS = ps.Stime * clockTickMul
 
 	// I/O stats
 	var ios procPidIo
@@ -776,7 +784,7 @@ func (s *nodeStats) update(
 		log.Println(
 			WrapMessage("failure to fetch block count: %w", err),
 		)
-	} else {
+	} else if h != 0 {
 		if !s.startHeightSet {
 			s.StartHeight = h
 			s.startHeightSet = true
@@ -785,8 +793,8 @@ func (s *nodeStats) update(
 		heightDelta := int64(s.CurrentHeight - s.StartHeight)
 		if heightDelta > 0 {
 			s.NsPerBlock = uint64(
-				((s.LastTs-s.StartTs) * 1_000_000_000) /
-				heightDelta,
+				((s.LastTs - s.StartTs) * 1_000_000_000) /
+					heightDelta,
 			)
 		}
 	}
@@ -842,11 +850,11 @@ func nodeMonitor(
 	checkInterval := time.Second * 1
 	stats := newNodeStats(
 		fmt.Sprintf(
-			"mempool_mb=%d" +
-			" utxocache_mb=%d" +
-			" assumevalid=%s" +
-			" noassumevalid=%t" +
-			" desc=%s",
+			"mempool_mb=%d"+
+				" utxocache_mb=%d"+
+				" assumevalid=%s"+
+				" noassumevalid=%t"+
+				" desc=%s",
 			opts.mempoolMB,
 			opts.utxoCacheMB,
 			opts.checkpoint,
@@ -870,7 +878,7 @@ func nodeMonitor(
 			log.Println(Wrap(err))
 		}
 		if opts.stopHeight > 0 &&
-		stats.CurrentHeight >= opts.stopHeight {
+			stats.CurrentHeight >= opts.stopHeight {
 			procSignalSend(pid, int(syscall.SIGTERM))
 		}
 		time.Sleep(checkInterval)
@@ -908,13 +916,14 @@ skip:
 func btcdBuild(opts btcdOpts) error {
 	const btcdRepoUrl = "https://github.com/allocz/btcd"
 	// const btcdRepoBranch = "checkpoint_no_prevout_disk_lookup"
-	const btcdRepoBranch = "master"
+	const btcdRepoBranch = "allocz"
+	// const btcdRepoBranch = "master"
 	os.MkdirAll("data", 0o755)
 	/*
-	if !opts.ForceRebuild && binExists {
-		return
-	}
-	build
+		if !opts.ForceRebuild && binExists {
+			return
+		}
+		build
 	*/
 	if !opts.forceRebuild && exists("data/btcd") {
 		return nil
@@ -922,7 +931,7 @@ func btcdBuild(opts btcdOpts) error {
 	if !exists("data/btcd-src") {
 		_, err := runCmd(
 			fmt.Sprintf(`git clone %s data/btcd-src`, btcdRepoUrl),
-		) 
+		)
 		if err != nil {
 			return Wrap(err)
 		}
@@ -953,11 +962,11 @@ type btcdOpts nodeOpts
 func (o *btcdOpts) ParseFlags(args []string) error {
 	fSet := flag.NewFlagSet("btcd", flag.ExitOnError)
 	var binArgs []string
-	defaultOpts := []struct{
-		flagName string
-		defaultV string
+	defaultOpts := []struct {
+		flagName    string
+		defaultV    string
 		binFlagName string
-		flagDest any
+		flagDest    any
 	}{
 		{"datadir", "./data/.btcd", "--datadir", &o.datadir},
 		{"rpcuser", "bitcoin", "--rpcuser", &o.rpcuser},
@@ -981,6 +990,7 @@ func (o *btcdOpts) ParseFlags(args []string) error {
 		{"nocheckpoint", "", "--nocheckpoints", &o.nocheckpoint},
 		{"connect", "", "--connect", &o.connect},
 		{"prune_mb", "", "--prune", &o.pruneMB},
+		{"signet", "", "--signet", &o.signet},
 		// internal
 		{"stop_height", "", "", &o.stopHeight},
 		{"stats_logfile", "", "", &o.statsLogFile},
@@ -1012,7 +1022,7 @@ func (o *btcdOpts) ParseFlags(args []string) error {
 	if err != nil {
 		return Wrap(err)
 	}
-	if o.nocheckpoint {
+	if o.nocheckpoint || o.signet {
 		o.checkpoint = ""
 	}
 	for _, opt := range defaultOpts {
@@ -1105,12 +1115,12 @@ func (o *bitcoindOpts) ParseFlags(args []string) error {
 	fSet := flag.NewFlagSet("btcd", flag.ExitOnError)
 	var binArgs []string
 	type optItem struct {
-		flagName string
-		defaultV string
+		flagName    string
+		defaultV    string
 		binFlagName string
-		flagDest any
+		flagDest    any
 	}
-	defaultOpts := []optItem {
+	defaultOpts := []optItem{
 		{"datadir", "./data/.bitcoind", "--datadir", &o.datadir},
 		{"rpcuser", "bitcoin", "--rpcuser", &o.rpcuser},
 		{"rpcpass", "bitcoin", "--rpcpassword", &o.rpcpassword},
@@ -1251,10 +1261,10 @@ func run() error {
 		return btcdCommand(ctx, os.Args[2:])
 	case "bitcoind":
 		return bitcoindCommand(ctx, os.Args[2:])
-	case "-h","--help","help":
+	case "-h", "--help", "help":
 		printHelpMessage()
 		return nil
-	default: 
+	default:
 		printHelpMessage()
 		os.Exit(1)
 	}
